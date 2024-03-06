@@ -112,8 +112,8 @@ for i in range(1, 4):  # Assuming there are 3 columns
     root.columnconfigure(i, weight=1)
 
 # Set the window size to 1000x600 pixels
-window_width = 1000
-window_height = 600
+window_width = 500
+window_height = 500
 root.geometry(f"{window_width}x{window_height}")
 
 # Run the Tkinter event loop

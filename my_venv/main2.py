@@ -2,7 +2,7 @@ import csv
 import tkinter as tk
 from tkinter import ttk
 from functools import partial
-from house import read_csv
+import pandas as pd
 
 class CarbonFootprintCalculator(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -16,12 +16,15 @@ class CarbonFootprintCalculator(tk.Tk):
         title_label.grid(row=0, column=0, columnspan=4, pady=20, sticky="nsew")
 
         # Read initial values from the CSV file
-        initial_country, initial_month, initial_year = self.read_initial_values_from_csv()
+        initial_values = self.read_initial_values_from_csv()
 
         labels_and_vars = [
-            ("COUNTRY:", tk.StringVar(value=initial_country), self.get_unique_values('COUNTRY'), ttk.Combobox),
-            ("MONTH_NAME:", tk.StringVar(value=initial_month), self.get_unique_values('MONTH_NAME'), ttk.Combobox),
-            ("YEAR:", tk.StringVar(value=initial_year), self.get_unique_values('YEAR'), ttk.Combobox),
+            ("COUNTRY:", tk.StringVar(value=initial_values.get('COUNTRY', '')),
+             self.get_unique_values('COUNTRY'), ttk.Combobox),
+            ("MONTH_NAME:", tk.StringVar(value=initial_values.get('MONTH_NAME', '')),
+             self.get_unique_values('MONTH_NAME'), ttk.Combobox),
+            ("YEAR:", tk.StringVar(value=initial_values.get('YEAR', '')),
+             self.get_unique_values('YEAR'), ttk.Combobox),
             ("Hydro:", tk.StringVar(), None, tk.Entry),
             ("Natural gas:", tk.StringVar(), None, tk.Entry),
             ("Renewables:", tk.StringVar(), None, tk.Entry),
@@ -67,41 +70,27 @@ class CarbonFootprintCalculator(tk.Tk):
         year = labels_and_vars[2][1].get()
 
         try:
-            file_path = "../resource/house.csv"
-            selected_columns = ["COUNTRY", "YEAR", "MONTH_NAME", "PRODUCT", "VALUE"]
-            header, data = read_csv(file_path, selected_columns)
+            # Read the CSV file into a DataFrame
+            df = pd.read_csv('../resource/house.csv')
 
-            for row in data:
-                if row[0] == country and row[2] == month_name and row[1] == year:
-                    self.display_values(labels_and_vars, row[3], row[4])
-                    return
+            # Filter rows based on user input
+            filtered_df = df[(df['COUNTRY'] == country) & (df['MONTH_NAME'] == month_name) & (df['YEAR'] == year)]
 
-            # If no matching row is found
-            self.clear_output_labels(labels_and_vars)
+            if not filtered_df.empty:
+                # Extract values from the 'PRODUCT' column
+                product_values = filtered_df.iloc[0][['Hydro', 'Natural gas', 'Renewables', 'Non-renewables']]
+
+                # Update the corresponding Entry widgets for Hydro, Natural gas, Renewables, and Non-renewables
+                labels_and_vars[3][1].set(product_values['Hydro'])
+                labels_and_vars[4][1].set(product_values['Natural gas'])
+                labels_and_vars[5][1].set(product_values['Renewables'])
+                labels_and_vars[6][1].set(product_values['Non-renewables'])
+
+            else:
+                self.clear_output_labels(labels_and_vars)
 
         except FileNotFoundError:
             print("File not found")
-
-    def display_values(self, labels_and_vars, products, values):
-        products_list = products.split(';') if products else []
-        values_list = values.split(';') if values else []
-
-        # Retrieve all values at once before updating any widgets
-        all_values = dict(zip(
-            [l[0].lower() for l in labels_and_vars[3:]],
-            [v.strip() for v in values_list]
-        ))
-
-        # Update each output widget with its corresponding value
-        for i in range(3, len(labels_and_vars)):
-            label_name = labels_and_vars[i][0].lower()
-            value = all_values.get(label_name, '')
-            widget_type = labels_and_vars[i][3]
-
-            if widget_type == ttk.Combobox:
-                labels_and_vars[i][1]['VALUE'] = value.split(',')
-            else:
-                labels_and_vars[i][1].set(value)
 
     def clear_output_labels(self, labels_and_vars):
         for i in range(3, len(labels_and_vars)):
@@ -109,21 +98,21 @@ class CarbonFootprintCalculator(tk.Tk):
 
     def read_initial_values_from_csv(self):
         try:
-            with open('../resource/house.csv', newline='') as csvfile:
-                reader = csv.DictReader(csvfile)
-                if reader:
-                    row = next(reader, None)
-                    if row:
-                        return row['COUNTRY'], row['MONTH_NAME'], row['YEAR']
+            # Read the CSV file into a DataFrame
+            df = pd.read_csv('../resource/house.csv')
+
+            if not df.empty:
+                return {'COUNTRY': df.iloc[0]['COUNTRY'], 'MONTH_NAME': df.iloc[0]['MONTH_NAME'], 'YEAR': df.iloc[0]['YEAR']}
         except FileNotFoundError:
             print("File not found")
-        return "", "", ""
+        return {}
 
     def get_unique_values(self, column_name):
         try:
-            with open('../resource/house.csv', newline='') as csvfile:
-                reader = csv.DictReader(csvfile)
-                return sorted(set(row[column_name] for row in reader))
+            # Read the CSV file into a DataFrame
+            df = pd.read_csv('../resource/house.csv')
+
+            return sorted(set(df[column_name]))
         except FileNotFoundError:
             print("File not found")
 
