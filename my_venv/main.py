@@ -61,6 +61,21 @@ class FoodCategoryApp:
 
 
 def create_label_entry_pair(parent, row, column, label_text, entry_var=None, options=None, widget_type=tk.Entry):
+    """
+    Create a label and an entry widget pair in the specified parent with the given text and options.
+
+    Parameters:
+        parent (tk.Widget): The parent widget to place the label and entry.
+        row (int): The row in the grid to place the label and entry.
+        column (int): The column in the grid to place the label and entry.
+        label_text (str): The text to display in the label.
+        entry_var (tk.StringVar, optional): The StringVar associated with the entry widget.
+        options (list, optional): List of options for a Combobox widget.
+        widget_type (tk.Widget, optional): The type of entry widget to create (default is Entry).
+
+    Returns:
+        tk.Widget: The created entry widget.
+    """
     label = tk.Label(parent, text=label_text)
     label.grid(row=row, column=column, padx=5, pady=5, sticky="e")
 
@@ -74,6 +89,17 @@ def create_label_entry_pair(parent, row, column, label_text, entry_var=None, opt
 
 
 def create_category_widgets(parent, row, column, category_name, labels_and_vars, food_category_app=None):
+    """
+    Create widgets for a category within the parent widget.
+
+    Parameters:
+        parent (tk.Widget): The parent widget to place the category widgets.
+        row (int): The row in the grid to place the category widgets.
+        column (int): The column in the grid to place the category widgets.
+        category_name (str): The name of the category.
+        labels_and_vars (list): List of tuples containing label text, entry variable, options, and widget type.
+        food_category_app (FoodCategoryApp, optional): An instance of FoodCategoryApp.
+    """
     frame = ttk.LabelFrame(parent, text=category_name)
     frame.grid(row=row, column=column, padx=10, pady=10, sticky="nsew")
 
