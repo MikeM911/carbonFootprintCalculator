@@ -1,6 +1,9 @@
+# Food Carbon Footprint Calculator
+
 import csv
 import tkinter as tk
 from tkinter import ttk
+
 
 class FoodCategoryApp:
     def __init__(self):
@@ -56,6 +59,7 @@ class FoodCategoryApp:
     def set_total_var(self, total_var):
         self.total_var = total_var
 
+
 def create_label_entry_pair(parent, row, column, label_text, entry_var=None, options=None, widget_type=tk.Entry):
     label = tk.Label(parent, text=label_text)
     label.grid(row=row, column=column, padx=5, pady=5, sticky="e")
@@ -67,6 +71,7 @@ def create_label_entry_pair(parent, row, column, label_text, entry_var=None, opt
 
     entry.grid(row=row, column=column + 1, padx=5, pady=5)
     return entry
+
 
 def create_category_widgets(parent, row, column, category_name, labels_and_vars, food_category_app=None):
     frame = ttk.LabelFrame(parent, text=category_name)
@@ -92,17 +97,19 @@ def create_category_widgets(parent, row, column, category_name, labels_and_vars,
     food_category_app.result_label = ttk.Label(frame, text="")
     food_category_app.result_label.grid(row=i + 3, column=0, columnspan=2)
 
+
 # Create the main Tkinter window
 root = tk.Tk()
 
 # Set the title of the window
-root.title("Carbon Footprint Calculator")
+root.title("Food Information App")
 
 # Set the background color of the main window to navy blue
 root.configure(bg='navy')
 
 # Create and place a Label widget to display a title within the window
-title_label = tk.Label(root, text="Blue Marble Carbon Footprint Calculator", font=("Helvetica", 16), bg='navy', fg='white')
+title_label = tk.Label(root, text="Blue Marble Carbon Footprint Calculator", font=("Helvetica", 16), bg='navy',
+                       fg='white')
 title_label.grid(row=0, column=0, columnspan=4, pady=20, sticky="nsew")  # Set sticky to center the text
 
 food_category_app = FoodCategoryApp()
@@ -112,8 +119,8 @@ for i in range(1, 4):  # Assuming there are 3 columns
     root.columnconfigure(i, weight=1)
 
 # Set the window size to 1000x600 pixels
-window_width = 500
-window_height = 500
+window_width = 1000
+window_height = 600
 root.geometry(f"{window_width}x{window_height}")
 
 # Run the Tkinter event loop
