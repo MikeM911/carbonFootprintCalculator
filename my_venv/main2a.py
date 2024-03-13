@@ -68,7 +68,7 @@ root.title("Household Information App")
 root.configure(bg='#001F3F')  # Hex color for navy blue
 
 # Set the dimensions of the window
-root.geometry("600x600")  # Adjust the width and height as needed
+root.geometry("500x500")  # Adjust the width and height as needed
 
 # Create a title label
 title_label = tk.Label(root, text="Blue Marble Carbon Footprint Calculator", font=('Helvetica', 16, 'bold'),

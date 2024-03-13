@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import pandas as pd
 
-
+# Function to calculate fuel consumption
 def calculate_fuel_consumption(make, model, distance):
     try:
         # Get the fuel consumption for the given make and model
@@ -14,14 +14,13 @@ def calculate_fuel_consumption(make, model, distance):
     except (IndexError, ValueError):
         return None, None
 
-
+# Function to update model options based on selected make
 def update_model_options(*args):
-    # Update the Model options based on the selected Make
     selected_make = make_var.get()
     model_dropdown['values'] = tuple(df[df['Make'] == selected_make]['Model'].unique())
     model_var.set(model_dropdown['values'][0])
 
-
+# Function to handle submission
 def submit():
     make_value = make_var.get()
     model_value = model_var.get()
@@ -42,7 +41,6 @@ def submit():
             result_label.config(text="Error: Make and Model not found in the dataset.")
     except ValueError as e:
         result_label.config(text=str(e))
-
 
 # Read the CSV file with pandas
 df = pd.read_csv('../resource/car.csv')
