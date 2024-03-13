@@ -17,6 +17,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\resource\food.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\resource\house.csv">
           <value>
             <Attribute>
