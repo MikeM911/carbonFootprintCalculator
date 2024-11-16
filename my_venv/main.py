@@ -128,7 +128,7 @@ def create_category_widgets(parent, row, column, category_name, labels_and_vars,
 root = tk.Tk()
 
 # Set the title of the window
-root.title("Food Information")
+root.title("Food Information App")
 
 # Set the background color of the main window to navy blue
 root.configure(bg='navy')
